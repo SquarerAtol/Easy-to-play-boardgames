@@ -1,0 +1,48 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS score;
+DROP TABLE IF EXISTS liked;
+
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  userId VARCHAR(12) UNIQUE NOT NULL,
+  email VARCHAR(40) UNIQUE NOT NULL,
+  password VARCHAR(20) NOT NULL,
+  created TIMESTAMP,
+);
+
+CREATE TABLE post (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
+  created TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE comment (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  post_id INTEGER NOT NULL,
+  body TEXT NOT NULL,
+  created TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (post_id) REFERENCES post (id)
+);
+
+CREATE TABLE score (
+  count INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE liked (
+  count INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  post_id INTEGER NOT NULL,
+  comment_id INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (post_id) REFERENCES post (id),
+  FOREIGN KEY (comment_id) REFERENCES comment (id)
+);

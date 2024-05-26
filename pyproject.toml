@@ -1,0 +1,28 @@
+[project]
+name = "Easy To Play Boardgames"
+version = "1.0.0"
+author = [
+  { name = "Cho Bum Jun",
+  email = "202184054@kangnam.ac.kr"
+]
+description = "2024 Capstone Design Project"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "flask",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[project.urls]
+Homepage = "https://github.com/SquarerAtol/"
+Issues = "https://github.com/SquarerAtol/"
