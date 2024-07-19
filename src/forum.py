@@ -8,7 +8,7 @@ from src.db import get_db
 
 bp = Blueprint('forum', __name__)
 
-@bp.route('/')
+@bp.route('/forum')
 def main():
     db = get_db()
     posts = db.execute(

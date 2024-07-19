@@ -6,27 +6,45 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
+    <div id="main-content">
     <nav>
-      <a>list</a>
-      <h1><a href="{{url_for('main')}}">Easy To Play Boardgames</a></h1>       
+      <a href="#" id="menu-button">MENU</a>
+      <h1><a href="{{url_for('main_page')}}">Easy To Play Boardgames</a></h1>       
       <ul>
         {% if g.user %}
         <li><span>{{ g.user['userId'] }}</span></li>
         <li><a href="{{ url_for('auth.logout') }}">log out</a></li>
+        <div id="side-menu" class="side-menu">
+          <a href="#" class="close-button" id="close-button">&times;</a>
+            <!-- Add menu items here -->
+            <a href="{{ url_for('main_page')}}">Home</a>
+            <a href="{{ url_for('main_page')}}">Games</a>
+            <a href="{{ url_for('forum.main')}}">Forum</a>
+            <a href="{{ url_for('main_page')}}">My Page</a>
+        </div>
         {% else %}
         <li><a href="{{ url_for('auth.register') }}">register</a></li>
         <li><a href="{{ url_for('auth.login') }}">log in</a></li>
+        <div id="side-menu" class="side-menu">
+          <a href="#" class="close-button" id="close-button">&times;</a>
+            <!-- Add menu items here -->
+            <a href="{{ url_for('main_page')}}">Home</a>
+            <a href="{{ url_for('main_page')}}">Games</a>
+            <a href="{{ url_for('forum.main')}}">Forum</a>
+        </div>
         {% endif %}
       </ul>
     </nav>
     <section class="content">
       <header>
-            {% block header %}{% endblock %}
-        </header>
+        {% block header %}{% endblock %}
+      </header>
         {% for message in get_flashed_messages() %}
             <div class="flash">{{ message }}</div>
         {% endfor %}
         {% block content %}{% endblock %}
     </section>
+  </div>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

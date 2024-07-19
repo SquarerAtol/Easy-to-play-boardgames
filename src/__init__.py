@@ -26,6 +26,10 @@ def create_app(test_config=None):
   
   from . import forum
   app.register_blueprint(forum.bp)
-  app.add_url_rule('/',endpoint='main')
+  
+  from . import main_page
+  app.register_blueprint(main_page.bp)
+  app.add_url_rule('/',endpoint='main_page')
+
   
   return app
