@@ -1,11 +1,13 @@
 import sqlite3
+
 import click
 from flask import current_app, g
 
+
 def get_db():
     """
-    Get a database connection. If there is none yet for the current application context,
-    create one.
+    Get a database connection. If there is none yet
+    for the current application context, create one.
     """
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -16,6 +18,7 @@ def get_db():
 
     return g.db
 
+
 def close_db(e=None):
     """
     If this request connected to the database, close the connection.
@@ -25,18 +28,19 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
+
 def init_db():
     """
     Initialize the database with the schema provided in 'schema.sql'.
     """
     db = get_db()
-    try:  
-      with current_app.open_resource('schema.sql') as f:
-          db.executescript(f.read().decode('utf8'))
+    try:
+        with current_app.open_resource('schema.sql') as f:
+            db.executescript(f.read().decode('utf8'))
     except sqlite3.OperationalError as e:
-      print(f"An error occurred: {e}")
-      raise
-      
+        print(f"An error occurred: {e}")
+        raise
+
 
 @click.command('init-db')
 def init_db_command():
@@ -46,9 +50,11 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
+
 def init_app(app):
     """
-    Register database functions with the Flask app. This is called by the application factory.
+    Register database functions with the Flask app.
+    This is called by the application factory.
     """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)

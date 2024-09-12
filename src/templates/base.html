@@ -12,9 +12,15 @@
       <h1><a href="{{url_for('main_page')}}">Easy To Play Boardgames</a></h1>       
       <ul>
         {% if g.user %}
-        <li><span>{{ g.user['userId'] }}</span></li>
-        <li><a href="{{ url_for('auth.logout') }}">log out</a></li>
-        <div id="side-menu" class="side-menu">
+        <li>
+			<span>
+				{{ g.user['userId'] }}
+			</span>
+		</li>
+			<li>
+				<a href="{{ url_for('auth.logout') }}">log out</a>
+			</li>
+			<div id="side-menu" class="side-menu">
           <a href="#" class="close-button" id="close-button">&times;</a>
             <!-- Add menu items here -->
             <a href="{{ url_for('main_page')}}">Home</a>
