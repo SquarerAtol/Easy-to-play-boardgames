@@ -12,7 +12,6 @@ class UserForm(FlaskForm):
 		],
 	)
 
-	
 	email = StringField(
 		"이메일 주소",
 		validators=[
@@ -20,7 +19,6 @@ class UserForm(FlaskForm):
 			Email(message="이메일 주소를 입력할 것"),
 		],
 	)
-
 
 	password = PasswordField(
 		"비밀번호",

@@ -8,7 +8,6 @@ from flask_wtf.csrf import CSRFProtect
 
 from src.config import config
 
-
 db = SQLAlchemy()
 csrf = CSRFProtect()
 login_manager = LoginManager()
@@ -19,7 +18,7 @@ login_manager.login_message = ""
 def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object(config[config_key])
-	
+
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
 
@@ -30,7 +29,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
 
     db.init_app(app)
     Migrate(app, db)
@@ -49,5 +47,5 @@ def create_app(test_config=None):
     from . import main_page
     app.register_blueprint(main_page.bp)
     app.add_url_rule('/', endpoint='main_page')
-    
+
     return app

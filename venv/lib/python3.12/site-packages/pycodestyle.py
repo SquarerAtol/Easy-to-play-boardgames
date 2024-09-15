@@ -68,7 +68,7 @@ if (
 ):  # pragma: no cover (<py310)
     tokenize._compile = lru_cache(tokenize._compile)  # type: ignore
 
-__version__ = '2.12.0'
+__version__ = '2.12.1'
 
 DEFAULT_EXCLUDE = '.svn,CVS,.bzr,.hg,.git,__pycache__,.tox'
 DEFAULT_IGNORE = 'E121,E123,E126,E226,E24,E704,W503,W504'
@@ -1949,7 +1949,10 @@ class Checker:
             if token_type == tokenize.STRING:
                 text = mute_string(text)
             elif token_type == FSTRING_MIDDLE:  # pragma: >=3.12 cover
-                text = 'x' * len(text)
+                # fstring tokens are "unescaped" braces -- re-escape!
+                brace_count = text.count('{') + text.count('}')
+                text = 'x' * (len(text) + brace_count)
+                end = (end[0], end[1] + brace_count)
             if prev_row:
                 (start_row, start_col) = start
                 if prev_row != start_row:    # different row

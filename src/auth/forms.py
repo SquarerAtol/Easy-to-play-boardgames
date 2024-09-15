@@ -12,7 +12,7 @@ class RegisterForm(FlaskForm):
 		],
 	)
 	email = StringField(
-		"이메일 주소",
+		"이a메일 주소",
 		validators=[
 			DataRequired("이메일 입력"),
 			Email("이메일 형식을 지켜"),
@@ -25,6 +25,7 @@ class RegisterForm(FlaskForm):
 		],
 	)
 	submit = SubmitField("등록")
+
 
 class LoginForm(FlaskForm):
 	email = StringField(
