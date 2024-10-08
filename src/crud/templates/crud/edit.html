@@ -1,0 +1,55 @@
+{% extends 'home/base.html' %}
+{% block title %}User Edit{% endblock %}
+{% block content %}
+<h2>User Edit</h2>
+<form action="{{ url_for('crud.edit_user', user_id=user.id) }}" method="POST" novalidate="novalidate">
+    {{ form.csrf_token }}
+
+    <p>
+        {{ form.username.label }} {{ form.username(placeholder="username",
+        value=user.username) }}
+    </p>
+    {% for error in form.username.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+
+    <p>
+        {{ form.email.label }} {{ form.email(placeholder="email",
+        value=user.email) }}
+    </p>
+    {% for error in form.email.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+
+    <p>
+        {{ form.password.label }} {{ form.password(placeholder="password") }}
+    </p>
+    {% for error in form.password.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+
+    <p>
+        {{ form.confirm.label }} {{ form.confirm(placeholder="password confirm") }}
+    </p>
+    {% for error in form.confirm.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+
+    <p><input type="submit" value="update" /></p>
+	{% for message in get_flashed_messages() %}
+	<span>{{ message }}</span>
+	{% endfor %}
+</form>
+
+<form action="{{ url_for('crud.own') }}">
+	<input type="submit" value="back">
+</form>
+
+<form action="{{ url_for('crud.delete_user', user_id=user.id) }}" method="POST">
+    {{ form.csrf_token }}
+    <input type="submit" value="delete">
+	{% for message in get_flashed_messages() %}
+	<span>{{ message }}</span>
+	{% endfor %}
+</form>
+{% endblock %}

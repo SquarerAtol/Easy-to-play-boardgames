@@ -1,0 +1,9 @@
+{% extends "home/base.html" %}
+{% block title %}Games{% endblock %}
+{%block content %}
+<h2>Game Upload</h2>
+<form method="post" enctype="multipart/form-data">
+	<p><input type="file" name="file"></p>
+	<p><input type="submit" value="submit"></p>
+</form>
+{% endblock %}

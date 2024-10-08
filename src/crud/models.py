@@ -12,8 +12,8 @@ class User(db.Model, UserMixin):
 	username = db.Column(db.String, index=True)
 	email = db.Column(db.String, unique=True, index=True)
 	password_hash = db.Column(db.String)
-	created_at = db.Column(db.Datetime, default=datetime.now)
-	updated_at = db.Column(db.Datetime, default=datetime.now, onupdate=datetime.now)
+	created_at = db.Column(db.DateTime, default=datetime.now)
+	updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 	@property
 	def password(self):
@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
 	def is_duplicate_email(self):
 		return User.query.filter_by(email=self.email).first() is not None
 
-	@login_manager.user_loader
-	def load_user(user_id):
-		return User.query.get(user_id)
+
+@login_manager.user_loader
+def load_user(user_id):
+	return User.query.get(user_id)

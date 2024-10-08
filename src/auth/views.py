@@ -5,7 +5,7 @@ from src.app import db
 from src.auth.forms import LoginForm, RegisterForm
 from src.crud.models import User
 
-auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static")
+auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static",)
 
 
 @auth.route("/")
@@ -35,8 +35,9 @@ def register():
 
 		next_ = request.args.get("next")
 		if next_ is None or not next_.startswith("/"):
-			next_ = url_for("")
+			next_ = url_for("home.index")
 		return redirect(next_)
+
 	return render_template("auth/register.html", form=form)
 
 
@@ -49,7 +50,7 @@ def login():
 
 		if user is not None and user.verify_password(form.password.data):
 			login_user(user)
-			return redirect(url_for(""))
+			return redirect(url_for("home.index"))
 		flash("이메일 or 비밀번호 오류")
 	return render_template("auth/login.html", form=form)
 

@@ -1,5 +1,5 @@
-from flask import Blueprint, redirect, render_template, url_for
-from flask_login import login_required
+from flask import Blueprint, flash, redirect, render_template, url_for
+from flask_login import current_user, login_required
 
 from src.app import db
 from src.crud.forms import UserForm
@@ -11,14 +11,16 @@ crud = Blueprint("crud", __name__, template_folder="templates", static_folder="s
 @crud.route("/")
 @login_required
 def index():
-	return render_template(" ")
+	return render_template("crud/index.html")
 
 
 @crud.route("/sql")
 @login_required
 def sql():
 	db.session.query(User).all()
-	return "check console log"
+	for user in users:
+		print(user)
+	return "check the console log"
 
 
 @crud.route("/users/new", methods=["POST", "GET"])
@@ -40,14 +42,20 @@ def create_user():
 	return render_template("crud/create.html", form=form)
 
 
-# @crud.route("/users")
-# @login_required
-# def users():
-# 	users = User.query.all()
-# 	return render_template("crud/index.html", users=users)
+@crud.route("/users")
+def users():
+	users = User.query.all()
+	return render_template("crud/index.html", users=users)
 
 
-@crud.route("/users<user_id>", methods=["GET", "POST"])
+@crud.route("/own")
+@login_required
+def own():
+	own = User.query.filter(User.id == current_user.id).all()
+	return render_template("crud/own.html", own=own)
+
+
+@crud.route("/own/<user_id>", methods=["GET", "POST"])
 @login_required
 def edit_user(user_id):
 	form = UserForm()
@@ -60,15 +68,17 @@ def edit_user(user_id):
 		user.password = form.password.data
 		db.session.add(user)
 		db.session.commit()
-		return redirect(url_for("crud.users"))
+		flash("update complete")
+		return redirect(url_for("crud.own"))
 
 	return render_template("crud/edit.html", user=user, form=form)
 
 
-@crud.route("users/<user_id>/delete", methods=["POST"])
+@crud.route("own/<user_id>/delete", methods=["POST"])
 @login_required
 def delete_user(user_id):
+	flash("completely deleted")
 	user = User.query.filter_by(id=user_id).first()
 	db.session.delete(user)
 	db.session.commit()
-	return redirect(url_for("crud.users"))
+	return redirect(url_for("home.index"))

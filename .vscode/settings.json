@@ -1,1 +1,13 @@
-{}
+{
+"python.languageServer": "Default",
+"python.analysis.autoImportCompletions": true,
+"editor.defaultFormatter": "ms-python.black-formatter",
+"editor.formatOnSave": true,
+"editor.codeActionsOnSave": {
+	"source.organizeImports": "explicit"
+},
+"mypy.enabled": true,
+"black-formatter.importStrategy": "useBundled",
+"editor.foldingImportsByDefault": true,
+"editor.defaultFoldingRangeProvider": null
+}

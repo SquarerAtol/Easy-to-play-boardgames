@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -15,37 +13,32 @@ login_manager.login_view = "auth.register"
 login_manager.login_message = ""
 
 
-def create_app(test_config=None):
-    app = Flask(__name__)
-    app.config.from_object(config[config_key])
+def create_app(config_key):
+	app = Flask(__name__)
+	app.config.from_object(config[config_key])
 
-    if test_config is None:
-        app.config.from_pyfile('config.py', silent=True)
+	db.init_app(app)
+	Migrate(app, db)
+	csrf.init_app(app)
+	login_manager.init_app(app)
 
-    else:
-        app.config.from_mapping(test_config)
+	from src.crud.views import crud
+	app.register_blueprint(crud, url_prefix="/crud")
 
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+	from src.auth.views import auth
+	app.register_blueprint(auth, url_prefix="/auth")
 
-    db.init_app(app)
-    Migrate(app, db)
-    csrf.init_app(app)
-    login_manager.init_app(app)
+	from src.home.views import home
+	app.register_blueprint(home, url_prefix="/home")
 
-    from src.crud import views as crud_views
-    app.register_blueprint(crud_views, url_prefix="/crud")
+	from src.game.views import game
+	app.register_blueprint(game, url_prefix="/game")
 
-    from src.auth import views as auth_views
-    app.register_blueprint(auth_views, url_prefix="/auth")
+	from src.forum.views import forum
+	app.register_blueprint(forum, url_prefix="/forum")
 
-    from . import forum
-    app.register_blueprint(forum.bp)
+	@app.route("/", methods=["GET"])
+	def main():
+		return render_template("home/index.html")
 
-    from . import main_page
-    app.register_blueprint(main_page.bp)
-    app.add_url_rule('/', endpoint='main_page')
-
-    return app
+	return app

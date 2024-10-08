@@ -7,38 +7,38 @@ class RegisterForm(FlaskForm):
 	username = StringField(
 		"유저명",
 		validators=[
-			DataRequired("유저명을 입력"),
-			Length(1, 12, "12자 이내"),
+			DataRequired(message="유저명을 입력"),
+			Length(1, 12, message="12자 이내"),
 		],
 	)
 	email = StringField(
-		"이a메일 주소",
+		"이메일 주소",
 		validators=[
-			DataRequired("이메일 입력"),
-			Email("이메일 형식을 지켜"),
+			DataRequired(message="이메일 입력"),
+			Email(message="이메일 형식을 지키세요"),
 		],
 	)
 	password = PasswordField(
 		"비밀번호",
 		validators=[
-			DataRequired("비밀번호 입력"),
+			DataRequired(message="비밀번호 입력"),
 		],
 	)
-	submit = SubmitField("등록")
+	submit = SubmitField("submit")
 
 
 class LoginForm(FlaskForm):
 	email = StringField(
 		"이메일 주소",
 		validators=[
-			DataRequired("이메일 입력"),
-			Email("이메일 형식 지켜"),
+			DataRequired(message="이메일 입력"),
+			Email(message="이메일 형식 지켜"),
 		],
 	)
 	password = PasswordField(
 		"비밀번호",
 		validators=[
-			DataRequired("비밀번호 입력"),
+			DataRequired(message="비밀번호 입력"),
 		],
 	)
-	submit = SubmitField("등록")
+	submit = SubmitField("log in")

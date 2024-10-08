@@ -1,17 +1,25 @@
-{% extends 'base.html' %}
+{% extends "home/base.html" %}
 
-{% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
-{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="userId">ID</label>
-    <input name="userId" id="userId" required>
-    <label for="password">password</label>
-    <input type="password" name="password" id="password" required>
-    <label name="email">email</label>
-    <input type="email" name="email" id="email" required>
-    <input type="submit" value="Register">
-  </form>
+<div class="mx-auto dt-auth-main">
+    <div class="card dt-auth-signup">
+        <header>Register</header>
+        <section>
+            <form method="post" action="{{ url_for('auth.register', next=request.args.get('next')) }}"
+                class="form-signin">
+                {{ form.csrf_token }}
+                {% for message in get_flashed_messages() %}
+                <div class="dt-auth-flash">{{ message }}</div>
+                {% endfor %}
+
+                {{ form.username(size=12, class="form-control dt-auth-input", placeholder="username") }}
+                {{ form.email(class="form-control dt-auth-input",placeholder="email") }}
+                {{ form.password(class="form-control dt-auth-input",placeholder="password") }}
+                {{ form.submit(class="btn btn-md btn-primary btn-block dt-auth-btn") }}
+            </form>
+        </section>
+    </div>
+</div>
 {% endblock %}
