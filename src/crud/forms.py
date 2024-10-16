@@ -9,7 +9,7 @@ class UserForm(FlaskForm):
         "유저명",
         validators=[
             DataRequired(message="유저명을 입력"),
-            length(max=10, message="12자 이내로"),
+            length(max=12, message="12자 이내로"),
             ]
         )
 

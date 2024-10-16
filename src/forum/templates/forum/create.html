@@ -1,15 +1,25 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}New Post{% endblock %}</h1>
-{% endblock %}
-
+{% extends 'home/base.html' %}
+{% block title %}New Post{% endblock %}
 {% block content %}
-  <form method="post">
-    <label for="title">Title</label>
-    <input name="title" id="title" value="{{ request.form['title'] }}" required>
-    <label for="body">Body</label>
-    <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
-    <input type="submit" value="Save">
+<h2>New Post</h2><hr>
+  <form action="{{ url_for('forum.create_post') }}" method="POST" novalidate="novalidate">
+	{{ form.csrf_token }}
+	<p>
+		{{ form.title.label }} {{ form.title(placeholder="title") }}
+	</p>
+	{% for error in form.title.errors %}
+	<span style="color: red">{{ error }}</span>
+	{% endfor %}
+	<p>
+		{{ form.body.label }} {{ form.body(placeholder="enter..") }}
+	</p>
+	{% for error in form.body.errors %}
+	<span style="color: red">{{ error }}</span>
+	{% endfor %}
+	<p>{{ form.submit() }}</p>
   </form>
+
+  <form action="{{ url_for('forum.index') }}">
+	<input type="submit" value="back">
+</form>
 {% endblock %}

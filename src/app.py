@@ -28,8 +28,8 @@ def create_app(config_key):
 	from src.auth.views import auth
 	app.register_blueprint(auth, url_prefix="/auth")
 
-	from src.home.views import home
-	app.register_blueprint(home, url_prefix="/home")
+	from src.home import views as home_views
+	app.register_blueprint(home_views.home)
 
 	from src.game.views import game
 	app.register_blueprint(game, url_prefix="/game")

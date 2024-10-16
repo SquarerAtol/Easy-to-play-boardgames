@@ -5,10 +5,10 @@ from wtforms.validators import DataRequired, length
 
 class PostForm(FlaskForm):
     title = StringField(
-        "title",
+        "제목",
         validators=[
             DataRequired(message="제목 입력"),
-            length(max=30, message="30자 이내"),
+            length(max=50, message="50자 이내"),
         ],
     )
 
@@ -16,7 +16,12 @@ class PostForm(FlaskForm):
         "내용",
         validators=[
             DataRequired(message="내용 입력"),
-            length(max=1000, message="1000자 이내"),
+            length(max=300, message="300자 이내"),
         ],
     )
-    submit = SubmitField("등록")
+    submit = SubmitField("Post")
+
+
+class DeleteForm(FlaskForm):
+    submit = SubmitField("Delete")
+

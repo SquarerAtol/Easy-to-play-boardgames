@@ -1,4 +1,7 @@
 {% extends "home/base.html" %}
 {% block title %}Games{% endblock %}
-{%block content %} Games Page
-<button><input type="{{ url_for('game.upload') }}"></button> {% endblock %}
+{% block content %} Games Page
+<form action="{{ url_for('game.upload_file') }}">
+	<input type="submit" value="upload">
+</form>
+{% endblock %}

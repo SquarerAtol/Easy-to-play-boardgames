@@ -55,7 +55,7 @@ def own():
 	return render_template("crud/own.html", own=own)
 
 
-@crud.route("/own/<user_id>", methods=["GET", "POST"])
+@crud.route("/own/<int:user_id>", methods=["GET", "POST"])
 @login_required
 def edit_user(user_id):
 	form = UserForm()
@@ -74,7 +74,7 @@ def edit_user(user_id):
 	return render_template("crud/edit.html", user=user, form=form)
 
 
-@crud.route("own/<user_id>/delete", methods=["POST"])
+@crud.route("own/<int:user_id>/delete", methods=["POST"])
 @login_required
 def delete_user(user_id):
 	flash("completely deleted")
