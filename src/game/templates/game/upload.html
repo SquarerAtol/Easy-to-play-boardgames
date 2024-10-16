@@ -3,15 +3,29 @@
 {%block content %}
 <div class="p-3">
 <h2>Game Upload</h2><hr>
-<form action="{{ url_for('game.upload_file') }}" method="post" enctype="multipart/form-data">
+<form action="{{ url_for('game.upload_file') }}" method="POST" enctype="multipart/form-data" novalidate="novalidate">
 	{{ form.csrf_token }}
 	<p>
-		<input type="file" name="file" id="file" accrpt=".html,.css,.js,.png,.jpg,.jpeg">
+        {{ form.game.label }} {{ form.game() }}
+    </p>
+    {% for error in form.game.errors %}
+        <span style="color: red">{{ error }}</span>
+    {% endfor %}
+	<p>
+		{{ form.title.label }} {{ form.title(placeholder="title") }}
 	</p>
-	<p><input type="submit" value="upload"></p>
-</form>
-{% for error in form.game.errors %}
-    <span style="color: red">{{ error }}</span>
-{% endfor %}
+	{% for error in form.title.errors %}
+	<span style="color: red">{{ error }}</span>
+	{% endfor %}
+	<p>
+		{{ form.description.label }} {{ form.description(placeholder="enter..") }}
+	</p>
+	{% for error in form.description.errors %}
+	<span style="color: red">{{ error }}</span>
+	{% endfor %}
     <p>{{ form.submit() }}</p>
+</form>
+<form action="{{ url_for('game.index') }}">
+	<input type="submit" value="back">
+</form>
 {% endblock %}
