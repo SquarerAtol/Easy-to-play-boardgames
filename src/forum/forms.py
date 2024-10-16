@@ -8,7 +8,7 @@ class PostForm(FlaskForm):
         "제목",
         validators=[
             DataRequired(message="제목 입력"),
-            length(max=50, message="50자 이내"),
+            length(max=20, message="20자 이내"),
         ],
     )
 
@@ -16,7 +16,7 @@ class PostForm(FlaskForm):
         "내용",
         validators=[
             DataRequired(message="내용 입력"),
-            length(max=300, message="300자 이내"),
+            length(max=200, message="200자 이내"),
         ],
     )
     submit = SubmitField("Post")

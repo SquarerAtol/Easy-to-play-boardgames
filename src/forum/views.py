@@ -62,12 +62,13 @@ def create_post():
 @forum.route("/<int:post_id>/update", methods=["POST", "GET"])
 @login_required
 def edit_post(post_id):
-	form = PostForm()
 	post = Post.query.filter_by(id=post_id).first()
 
 	if post is None:
 		flash("Post not found.", "error")
 		return redirect(url_for("forum.index"))
+
+	form = PostForm(obj=post)
 
 	if form.validate_on_submit():
 		post.title = form.title.data
@@ -84,6 +85,12 @@ def edit_post(post_id):
 @login_required
 def delete_post(post_id):
 	post = Post.query.filter_by(id=post_id).first()
+
+	if not post:
+		flash("Post not found", "error")
+		return redirect(url_for("forum.index"))
+
 	db.session.delete(post)
 	db.session.commit()
+	flash('Post deleted Successfully', "success")
 	return redirect(url_for("forum.index"))

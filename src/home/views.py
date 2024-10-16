@@ -3,6 +3,7 @@ from sqlalchemy import desc, select
 
 from src.app import db
 from src.crud.models import User
+from src.forum.forms import DeleteForm
 from src.forum.models import Post
 
 home = Blueprint('home', __name__, template_folder="templates", static_folder="static",)
@@ -17,4 +18,8 @@ def index():
 	)
 	result = db.session.execute(posts).scalars().all()
 
-	return render_template('home/index.html', posts=result)
+	users = User.query.all()
+
+	delete_form = DeleteForm()
+
+	return render_template('home/index.html', posts=result, users=users, delete_form=delete_form)
