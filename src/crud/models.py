@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from flask_login import UserMixin
-from sqlalchemy import Nullable
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from src.app import db, login_manager

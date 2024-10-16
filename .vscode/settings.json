@@ -9,5 +9,7 @@
 "mypy.enabled": true,
 "black-formatter.importStrategy": "useBundled",
 "editor.foldingImportsByDefault": true,
-"editor.defaultFoldingRangeProvider": null
+"editor.defaultFoldingRangeProvider": null,
+"terminal.integrated.fontFamily": "Cascadia Code Light",
+"editor.fontFamily": "Cascadia Code, Pretendard, Consolas, 'Courier New', monospace"
 }
