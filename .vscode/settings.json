@@ -10,6 +10,6 @@
 "black-formatter.importStrategy": "useBundled",
 "editor.foldingImportsByDefault": true,
 "editor.defaultFoldingRangeProvider": null,
-"terminal.integrated.fontFamily": "Cascadia Code Light",
-"editor.fontFamily": "Cascadia Code, Pretendard, Consolas, 'Courier New', monospace"
+"terminal.integrated.fontFamily": "Cascadia Code Light, monaco",
+"editor.fontFamily": "monaco, Cascadia Code, Pretendard, Consolas, 'Courier New', monospace"
 }

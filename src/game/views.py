@@ -17,12 +17,12 @@ game = Blueprint("game", __name__, static_folder="static", template_folder="temp
 
 @game.route('/')
 def index():
-	user_games = (
-		db.session.query(User, Game).join(Game).filter(User.id == Game.user_id).all()
+	games = (
+		db.session.query(User, Game).join(Game, User.id == Game.user_id).all()
 	)
 	delete_form = DeleteForm()
 
-	return render_template('game/index.html', user_games=user_games,
+	return render_template('game/index.html', games=games,
 						   delete_form=delete_form)
 
 

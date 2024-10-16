@@ -4,7 +4,7 @@ from src.app import db
 
 
 class Game(db.Model):
-	__tablename__ = "user_games"
+	__tablename__ = "games"
 	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 	filename = db.Column(db.String(255), nullable=False)
@@ -14,5 +14,4 @@ class Game(db.Model):
 	created_at = db.Column(db.DateTime, default=datetime.now, nullable=False)
 	updated_at = db.Column(db.DateTime, default=datetime.now,
 						   onupdate=datetime.now, nullable=False)
-	# user = db.relationship('User', back_populates='user_games')
-	user = db.relationship('User', backref=db.backref('user_games', lazy=True))
+	user = db.relationship('User', back_populates='games')
