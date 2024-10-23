@@ -10,10 +10,10 @@ from src.game.models import Game
 home = Blueprint('home', __name__, template_folder="templates", static_folder="static",)
 
 
-@home.route('/')
-def index():
+@home.route('/<int:game_id>')
+def index(game_id):
 
-	game = Game.query.filter_by(id=1).first()
+	game = Game.query.filter_by(id=game_id).first()
 
 	posts = (
 		select(Post)

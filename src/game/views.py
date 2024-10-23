@@ -5,7 +5,6 @@ from pathlib import Path
 from flask import (Blueprint, current_app, flash, redirect, render_template,
                    request, send_from_directory, url_for)
 from flask_login import current_user, login_required
-from sqlalchemy import desc, select
 from werkzeug.utils import secure_filename
 
 from src.app import db
@@ -54,6 +53,7 @@ def upload_file():
 			db.session.commit()
 			flash("File uploaded successfully!", "success")
 
+			# ZIP 해제 // 안될 것 같음
 			if upload_file and upload_file.filename.lower().endswith(".zip"):
 				filename = secure_filename(upload_file.filename)
 				file_path = Path(current_app.config['UPLOAD_FOLDER'], filename)
@@ -73,9 +73,10 @@ def upload_file():
 
 
 # Route to display the uploaded game
-@game.route("/<filename>/<int:game_id>")
-def show_game(filename, game_id):
-	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+@game.route("/<int:game_id>")
+def show_game(game_id):
+	return send_from_directory(current_app.config['UPLOAD_FOLDER'],
+                            game_id=game_id)
 
 
 # Serve the uploaded files
