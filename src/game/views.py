@@ -2,9 +2,10 @@ import os
 import zipfile
 from pathlib import Path
 
-from flask import (Blueprint, current_app, flash, redirect, render_template,
-                   request, send_from_directory, url_for)
+from flask import (Blueprint, abort, current_app, flash, redirect,
+                   render_template, request, send_from_directory, url_for)
 from flask_login import current_user, login_required
+from sqlalchemy import desc
 from werkzeug.utils import secure_filename
 
 from src.app import db
@@ -23,7 +24,7 @@ def index():
 	# 	.order_by(desc(Game.created_at))
 	# )
 	# games = db.session.execute(games_query).all()
-	games = Game.query.all()
+	games = Game.query.join(User).order_by(desc(Game.created_at)).all()
 
 	delete_form = DeleteForm()
 
@@ -73,10 +74,12 @@ def upload_file():
 
 
 # Route to display the uploaded game
-@game.route("/<int:game_id>")
-def show_game(game_id):
-	return send_from_directory(current_app.config['UPLOAD_FOLDER'],
-                            game_id=game_id)
+@game.route("/<filename>/<int:game_id>")
+def show_game(game_id, filename):
+    game = Game.query.get(game_id)
+    if not game:
+        abort(404)
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
 # Serve the uploaded files

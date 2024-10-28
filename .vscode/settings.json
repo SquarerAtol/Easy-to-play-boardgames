@@ -11,5 +11,5 @@
 "editor.foldingImportsByDefault": true,
 "editor.defaultFoldingRangeProvider": null,
 "terminal.integrated.fontFamily": "Cascadia Code Light, monaco",
-"editor.fontFamily": "monaco, Cascadia Code, Pretendard, Consolas, 'Courier New', monospace"
+"editor.fontFamily": "Cascadia Code, monaco, Pretendard, Consolas, 'Courier New', monospace"
 }

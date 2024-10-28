@@ -7,20 +7,23 @@
 	<form action="{{ url_for('game.upload_file') }}">
 		<input type="submit" value="upload">
 	</form>
-</div>
-{% for game in games %}
-<div class="card col-md-3">
-	<a href="{{ url_for('home.index', game_id=game.id) }}">
-		{{ game.title }}
-	</a>
-	<div class="d-flex flex-row-reverse">
-		<form action="{{ url_for('game.delete_game', game_id=game.id) }}" method="POST">
-			{{ delete_form.csrf_token }}
-			<input class="danger" type="submit" value="Delete" onclick="return confirm('정말 삭제하겠습니까?');">
-		</form>
+</div><hr>
+<div class="container">
+	<div class="row row-cols-auto">
+		{% for game in games %}
+		<div class="col">title: 
+			<a href="{{ url_for('home.home_game', filename=game.upload_path, game_id=game.id) }}">
+				{{ game.title }}
+			</a>
+			<div class="about">by {{ game.user.username }} on {{ game.created_at.strftime('%m/%d %H:%M') }}</div>
+			<form action="{{ url_for('game.delete_game', game_id=game.id) }}" method="POST">
+				{{ delete_form.csrf_token }}
+				<input class="danger" type="submit" value="Delete" onclick="return confirm('정말 삭제하겠습니까?');">
+			</form>
+		</div>
+		{% endfor %}
 	</div>
 </div>
-{% endfor %}
 {% endblock %}
 
 		<!-- <div class="about">by {{ game.user.username }} on {{ game.created_at.strftime('%m/%d %H:%M') }}</div>
