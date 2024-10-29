@@ -1,5 +1,10 @@
 *.pyc
-games/
+files/game_file/*.png
+files/game_file/*.jpg
+files/game_file/*.jpeg
+files/game_file/*.html
+files/game_file/*.css
+files/game_file/*.js
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,flask,vscode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,flask,vscode
