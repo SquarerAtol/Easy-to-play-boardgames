@@ -1,5 +1,7 @@
+from os import error
+
 from flask import session
-# from flask_login import current_user, login_required
+from flask_login import current_user, login_required
 from flask_socketio import Namespace, emit, join_room, leave_room
 
 
@@ -14,29 +16,36 @@ class ChatNamespace(Namespace):
 		emit('my response', data)
 
 	def on_joined(self, data):
+		if current_user.is_authenticated:
+			name = current_user.username
+		else:
+			name = session.get('name')
 		room = session.get('room')
-		name = session.get('name')
 		if room and name:
 			join_room(room)
 			emit('status', {'message': f'{name} has joined.'}, room=room)
+		if name == '':
+			emit('error', {'message': 'Name is missing. Please try again.'})
+			return
 
 	def on_text(self, data):
+		if current_user.is_authenticated:
+			name = current_user.username
+		else:
+			name = session.get('name')
 		room = session.get('room')
-		name = session.get('name')
 		if room and name:
 			emit('message', {'message': f"{name}: {data['message']}"}, room=room)
+		if not data.get('message', '').strip():
+			emit('error', {'message': "Message can't be blank. Please enter some text."})
+			return
 
 	def on_left(self, data):
+		if current_user.is_authenticated:
+			name = current_user.username
+		else:
+			name = session.get('name')
 		room = session.get('room')
-		name = session.get('name')
 		if room and name:
 			leave_room(room)
 			emit('status', {'message': f'{name} has left.'}, room=room)
-
-	# @login_required
-	# def connect_handler(self):
-	# 	if current_user.is_authenticated:
-	# 		emit('my response', {'message:': '{0} has joined.'
-	# 							 .format(current_user.id)}, broadcast=True)
-	# 	else:
-	# 		return False

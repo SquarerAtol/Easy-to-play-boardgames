@@ -29,23 +29,32 @@
 			$('#text').keypress(function(e) {
 				var code = e.keyCode || e.which;
 				if (code == 13) {  // Enter key
-					const text = $('#text').val();
-					$('#text').val('');
-					socket.emit('text', {message: text});  // Match with 'on_text' in your server
+					e.preventDefault();  // Prevent newline in the input
+					const text = $('#text').val().trim();
+					if (text !== '') {  // Only emit if text is not empty
+						socket.emit('text', {message: text});
+						$('#text').val('');  // Clear the input field
+					} else {
+						alert('Message cannot be empty.');
+					}
 				}
 			});
 		});
 	</script>
 </head>
 <body>
+	{% if current_user.is_authenticated %}
+	<p>{{ current_user.username }}</p>
+	{% else %}
 	<form action="{{ url_for('chat.index') }}" method="post">
 		<p>사용자 <input type = "text" name = "name" />
 		<input type="submit" value="입력"></p>
 	</form>
-	<p>
-		현재 사용자: {{ name }}
-	</p>
-	<input placeholder="Type your message here" size="40" id="text"><br><br>
+		<p>
+			현재 사용자: {{ name }}
+		</p>
+	{% endif %}
+	<input placeholder="Type message and ENTER" size="40" id="text"><br><br>
 	<textarea cols="40" rows="15" id="chat" readonly></textarea><br><br>
 	<!-- <a href="#" onclick="leave_room();">Exit</a> -->
 </body>
