@@ -24,7 +24,7 @@ class ChatNamespace(Namespace):
 		room = session.get('room')
 		name = session.get('name')
 		if room and name:
-			emit('message', {'message': f'{name}: {data['message']}'}, room=room)
+			emit('message', {'message': f"{name}: {data['message']}"}, room=room)
 
 	def on_left(self, data):
 		room = session.get('room')
