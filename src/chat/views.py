@@ -3,7 +3,7 @@ from flask import (Blueprint, redirect, render_template, request, session,
 
 from src.chat.forms import ChatForm
 
-chat = Blueprint("chat", __name__, template_folder="templates", static_folder="static")
+chat = Blueprint("chat", __name__, template_folder="templates")
 
 
 @chat.route('/', methods=['GET', 'POST'])
@@ -12,5 +12,5 @@ def index():
     # form = ChatForm()
 	session['name'] = request.form.get('name', '').strip()
 	name = session.get('name', '')
-	room = 'main_room'
+	room = 0
 	return render_template('chat/index.html', name=name, room=room)
