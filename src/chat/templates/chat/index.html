@@ -1,0 +1,22 @@
+<html>
+<head>
+	<title>chat</title>
+	<!-- <script type="text/javascript">
+		function openChatPopup() {
+			window.open(
+				"/chat/create", // URL of the chat page
+				"ChatRoom",     // Window name
+				"width=550,height=550" // Popup dimensions
+			);
+		}
+	</script> -->
+</head>
+<body>
+		<form action="{{ url_for('chat.index') }}" method="POST">
+			<p>닉네임 <input type = "text" name = "name" /></p>
+			<p>방이름 <input type = "text" name = "room" /></p>
+			<p><input type = "submit" value = "입장하기" onclick="openChatPopup()" /></p>
+		 </form>
+	</body>
+	</form>
+</html>

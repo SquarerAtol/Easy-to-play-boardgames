@@ -10,8 +10,8 @@ class UserForm(FlaskForm):
         validators=[
             DataRequired(message="유저명을 입력"),
             length(max=12, message="12자 이내로"),
-            ]
-        )
+		]
+	)
 
     email = StringField(
 		"이메일 주소",

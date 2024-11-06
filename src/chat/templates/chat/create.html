@@ -1,0 +1,55 @@
+<html>
+<head>
+	<title>Chat Room</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		var socket;
+		$(document).ready(function() {
+			socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+			
+			// Handle connection event
+			socket.on('connect', function() {
+				socket.emit('joined', {data: 'User connected'});  // Match this with your server's 'joined' event handler
+			});
+			
+			// Handle status updates
+			socket.on('status', function(data) {
+				$('#chat').val($('#chat').val() + '<' + data.message + '>\n');
+				$('#chat').scrollTop($('#chat')[0].scrollHeight);
+			});
+			
+			// Handle messages
+			socket.on('message', function(data) {
+				$('#chat').val($('#chat').val() + data.message + '\n');
+				$('#chat').scrollTop($('#chat')[0].scrollHeight);
+			});
+			
+			// Send message on Enter key press
+			$('#text').keypress(function(e) {
+				var code = e.keyCode || e.which;
+				if (code == 13) {  // Enter key
+					const text = $('#text').val();
+					$('#text').val('');
+					socket.emit('text', {message: text});  // Match with 'on_text' in your server
+				}
+			});
+		});
+		
+		// Function to leave the room
+		function leave_room() {
+			socket.emit('left', {}, function() {
+				socket.disconnect();
+				window.location.href = "{{ url_for('chat.index') }}";
+			});
+		}
+	</script>
+</head>
+<body>
+	<h1>Room: {{ room }}</h1>
+	<textarea cols="60" rows="20" id="chat" readonly></textarea><br><br>
+	<p>{{ name }}</p>
+	<input placeholder="Type your message here" size="60" id="text"><br><br>
+	<a href="#" onclick="leave_room();">Exit</a>
+</body>
+</html>

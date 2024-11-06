@@ -9,7 +9,6 @@ class BaseConfig:
     UPLOAD_FOLDER = str(Path(basedir, "src", "files", "game_file"))
     
 
-
 class LocalConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'local.sqlite'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -23,7 +22,19 @@ class TestingConfig(BaseConfig):
     # UPLOAD_FOLDER = str(Path(basedir, "tests", "forum", "images"))
 
 
+class DevelopmentConfig(BaseConfig):
+    DEBUG = True
+    # Additional development config settings
+
+
+class ProductionConfig(BaseConfig):
+    DEBUG = False
+    # Additional production config settings
+
+
 config = {
     "testing": TestingConfig,
-    "local": LocalConfig
+    "local": LocalConfig,
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
 }

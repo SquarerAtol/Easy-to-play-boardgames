@@ -19,7 +19,7 @@ game = Blueprint("game", __name__, static_folder="static", template_folder="temp
 @game.route('/')
 def index():
 	# games_query = (
-    # 	select(Game)
+	# 	select(Game)
 	# 	.join(User, User.id == Game.user_id)
 	# 	.order_by(desc(Game.created_at))
 	# )
@@ -55,19 +55,19 @@ def upload_file():
 			flash("File uploaded successfully!", "success")
 
 			# ZIP 해제 // 안될 것 같음
-			if upload_file and upload_file.filename.lower().endswith(".zip"):
-				filename = secure_filename(upload_file.filename)
-				file_path = Path(current_app.config['UPLOAD_FOLDER'], filename)
-				upload_file.save(file_path)
+			# if upload_file and upload_file.filename.lower().endswith(".zip"):
+			# 	filename = secure_filename(upload_file.filename)
+			# 	file_path = Path(current_app.config['UPLOAD_FOLDER'], filename)
+			# 	upload_file.save(file_path)
 
-				# Extract ZIP
-				extract_folder = Path(current_app.config['UPLOAD_FOLDER'], filename.split(".")[0])
-				with zipfile.ZipFile(file_path, 'r') as zip_ref:
-					zip_ref.extractall(extract_folder)
+			# 	# Extract ZIP
+			# 	extract_folder = Path(current_app.config['UPLOAD_FOLDER'], filename.split(".")[0])
+			# 	with zipfile.ZipFile(file_path, 'r') as zip_ref:
+			# 		zip_ref.extractall(extract_folder)
 
-				os.remove(file_path)  # Remove the original ZIP file
-				flash("Game uploaded successfully!", "success")
-			return redirect(url_for("game.index", filename=filename.split(".")[0]))
+			# 	os.remove(file_path)  # Remove the original ZIP file
+			# 	flash("Game uploaded successfully!", "success")
+			# return redirect(url_for("game.index", filename=filename.split(".")[0]))
 		return redirect(url_for('game.index'))
 
 	return render_template("game/upload.html", form=form)
@@ -76,16 +76,16 @@ def upload_file():
 # Route to display the uploaded game
 @game.route("/<filename>/<int:game_id>")
 def show_game(game_id, filename):
-    game = Game.query.get(game_id)
-    if not game:
-        abort(404)
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
-
-
-# Serve the uploaded files
-@game.route('/uploads/<path:filename>')
-def download_file(filename):
+	game = Game.query.get(game_id)
+	if not game:
+		abort(404)
 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+
+
+# # Serve the uploaded files
+# @game.route('/uploads/<path:filename>')
+# def download_file(filename):
+# 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
 @game.route("<int:game_id>/delete", methods=["POST"])
