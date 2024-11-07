@@ -44,15 +44,21 @@
 </head>
 <body>
 	{% if current_user.is_authenticated %}
-	<p>{{ current_user.username }}</p>
+		<p>{{ current_user.username }}</p>
 	{% else %}
-	<form action="{{ url_for('chat.index') }}" method="post">
-		<p>사용자 <input type = "text" name = "name" />
-		<input type="submit" value="입력"></p>
-	</form>
+	<form action="{{ url_for('chat.index') }}" method="post" novalidate="novalidate">
+		{{ form.csrf_token }}
 		<p>
-			현재 사용자: {{ name }}
+			사용자 <input type = "text" name = "name" required/>
+			<input type="submit" value="입력">
 		</p>
+		{% if not name %}
+			<p style="color: red;">사용자 이름을 입력하세요.</p>
+		{% endif %}
+	</form>
+	<p>
+		현재 사용자: {{ name }}
+	</p>
 	{% endif %}
 	<input placeholder="Type message and ENTER" size="40" id="text"><br><br>
 	<textarea cols="40" rows="15" id="chat" readonly></textarea><br><br>

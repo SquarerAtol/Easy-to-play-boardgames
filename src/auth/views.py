@@ -58,4 +58,5 @@ def login():
 @auth.route("/logout")
 def logout():
 	logout_user()
-	return redirect(url_for("auth.login"))
+	flash("Logged out")
+	return redirect(url_for("home.index"))

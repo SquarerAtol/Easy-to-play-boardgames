@@ -82,10 +82,10 @@ def show_game(game_id, filename):
 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
-# # Serve the uploaded files
-# @game.route('/uploads/<path:filename>')
-# def download_file(filename):
-# 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+# Serve the uploaded files
+@game.route('/uploads/<path:filename>')
+def download_file(filename):
+	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
 @game.route("<int:game_id>/delete", methods=["POST"])

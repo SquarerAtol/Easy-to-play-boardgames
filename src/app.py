@@ -8,7 +8,7 @@ from flask_wtf.csrf import CSRFProtect
 from src.config import config
 
 db = SQLAlchemy()
-# csrf = CSRFProtect()
+csrf = CSRFProtect()
 login_manager = LoginManager()
 login_manager.login_view = "auth.register"
 login_manager.login_message = ""
@@ -21,7 +21,7 @@ def create_app(config_key):
 
 	db.init_app(app)
 	Migrate(app, db)
-	# csrf.init_app(app)
+	csrf.init_app(app)
 	login_manager.init_app(app)
 	socketio.init_app(app)		# socket run
 
