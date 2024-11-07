@@ -5,7 +5,7 @@ developed by [SquarerAtol](github.com/SquarerAtol)
 upload file allowed "html,css,js,jpeg,jpg,png"
 
 if you upload any file in this project
-then make new directory ```file path: src/files/game_file```
+then make new directory ```src/files/game_file```
 ### mac/linux
 ```
 $ python3 -m venv venv
