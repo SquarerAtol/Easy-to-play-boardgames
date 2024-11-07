@@ -7,8 +7,7 @@ from src.crud.models import User
 from src.forum.forms import DeleteForm, PostForm
 from src.forum.models import Post
 
-forum = Blueprint("forum", __name__, template_folder="templates", static_folder="static"
-,)
+forum = Blueprint("forum", __name__, template_folder="templates",)
 
 
 @forum.route("/")

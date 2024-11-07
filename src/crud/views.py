@@ -5,7 +5,7 @@ from src.app import db
 from src.crud.forms import UserForm
 from src.crud.models import User
 
-crud = Blueprint("crud", __name__, template_folder="templates", static_folder="static",)
+crud = Blueprint("crud", __name__, template_folder="templates")
 
 
 @crud.route("/")

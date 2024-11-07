@@ -13,7 +13,7 @@ from src.crud.models import User
 from src.game.forms import DeleteForm, UploadGameForm
 from src.game.models import Game
 
-game = Blueprint("game", __name__, static_folder="static", template_folder="templates")
+game = Blueprint("game", __name__, template_folder="templates",)
 
 
 @game.route('/')

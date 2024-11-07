@@ -5,7 +5,7 @@ from src.app import db
 from src.auth.forms import LoginForm, RegisterForm
 from src.crud.models import User
 
-auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static",)
+auth = Blueprint("auth", __name__, template_folder="templates",)
 
 
 @auth.route("/")

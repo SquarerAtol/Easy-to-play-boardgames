@@ -7,7 +7,7 @@ from src.forum.forms import DeleteForm
 from src.forum.models import Post
 from src.game.models import Game
 
-home = Blueprint('home', __name__, template_folder="templates", static_folder="static",)
+home = Blueprint('home', __name__, template_folder="templates",)
 
 
 @home.route('/')
