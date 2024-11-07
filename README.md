@@ -4,7 +4,7 @@ developed by [SquarerAtol](github.com/SquarerAtol)
 ## caution
 upload file allowed "html,css,js,jpeg,jpg,png"
 
-file path: src/files/game_file
+if you upload any file in this project then make new file :: file path: src/files/game_file
 ### mac/linux
 ```
 $ python3 -m venv venv
