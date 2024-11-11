@@ -20,6 +20,8 @@ def index():
 	result = db.session.execute(posts).scalars().all()
 
 	users = User.query.all()
+	for user in users:
+		user.masked_email = mask_email(user.email)
 
 	delete_form = DeleteForm()
 
@@ -45,3 +47,13 @@ def home_game(game_id, filename):
 
 	return render_template('home/index.html', game=game, filenaem=filename, posts=result,
 						users=users, delete_form=delete_form)
+
+
+def mask_email(email):
+	# 이메일 마스킹 함수: 이메일 주소의 사용자 부분을 일부 *로 대체
+	name, domain = email.split('@')
+	if len(name) > 2:
+		masked_name = name[0] + '*' * (len(name) - 2) + name[-1]
+	else:
+		masked_name = name[0] + '*'
+	return masked_name + '@' + domain

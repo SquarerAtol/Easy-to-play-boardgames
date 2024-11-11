@@ -1,7 +1,7 @@
 {% extends 'home/base.html' %}
 {% block title %}User Edit{% endblock %}
 {% block content %}
-<h2>User Edit</h2>
+<h2>User Edit</h2><hr>
 <form action="{{ url_for('crud.edit_user', user_id=user.id) }}" method="POST" novalidate="novalidate">
     {{ form.csrf_token }}
 

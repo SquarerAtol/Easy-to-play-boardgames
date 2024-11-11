@@ -1,21 +1,21 @@
 {% extends "home/base.html" %}
 {% block title %}User List{% endblock %}
 {% block content %}
-<h2>User List</h2>
+<h2>User List</h2><hr>
 
 <table>
     <tr>
-        <th>id</th>
+        <!-- <th>id</th> -->
         <th>username</th>
         <th>e-mail</th>
     </tr>
     {% for user in users %}
     <tr>
-        <td>
+        <!-- <td>
             <a href="{{ url_for('crud.edit_user', user_id=user.id) }}">{{ user.id }}</a>
-        </td>
+        </td> -->
         <td>{{ user.username }}</td>
-        <td>{{ user.email }}</td>
+        <td>{{ user.masked_email }}</td>
     </tr>
     {% endfor %}
 </table>

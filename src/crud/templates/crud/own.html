@@ -1,22 +1,16 @@
 {% extends "home/base.html" %}
 {% block title %}user page{% endblock %}
 {% block content %}
-<h2>user</h2>
-
-<table>
-    <tr>
-        <th>username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th>e-mail</th>
-    </tr>
-    <tr>
-        <td>{{ current_user.username }}</td>
-        <td>{{ current_user.email }}</td>
-		<td>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="{{ url_for('crud.edit_user', user_id=current_user.id) }}">
-				more
-			</a>
-		</td>
-    </tr>
-</table>
+<h2>User Page</h2><hr>
+   <p>
+		<label>유저명&nbsp;</label>
+		{{ current_user.username }}
+   </p>
+   <p>
+		<label>이메일 주소&nbsp;</label>
+		{{ current_user.email }}
+   </p>
+	<a href="{{ url_for('crud.edit_user', user_id=current_user.id) }}">
+		Edit
+	</a>
 {% endblock %}
