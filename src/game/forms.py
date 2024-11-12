@@ -7,9 +7,10 @@ from wtforms.validators import DataRequired, length
 
 class UploadGameForm(FlaskForm):
 	game = FileField(
+		"file",
 		validators=[
 			FileRequired("파일을 지정하세요"),
-			FileAllowed(['html', 'css', 'js', 'png', 'jpg', 'jpeg'], "지원되지 않는 파일 형식"),
+			FileAllowed(['zip', 'html', 'css', 'js', 'png', 'jpg', 'jpeg'], "지원되지 않는 파일 형식"),
 		],
 	)
 	title = StringField(

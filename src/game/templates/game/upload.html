@@ -6,19 +6,22 @@
 <form action="{{ url_for('game.upload_file') }}" method="POST" enctype="multipart/form-data" novalidate="novalidate">
 	{{ form.csrf_token }}
 	<p>
-        {{ form.game.label }} {{ form.game() }}
+		{{ form.game.label }}
+		{{ form.game() }}
     </p>
     {% for error in form.game.errors %}
         <span style="color: red">{{ error }}</span>
     {% endfor %}
+	{{ form.title.label }}
 	<p>
-		{{ form.title.label }} {{ form.title(placeholder="title") }}
+		{{ form.title(placeholder="title") }}
 	</p>
 	{% for error in form.title.errors %}
 	<span style="color: red">{{ error }}</span>
 	{% endfor %}
+	{{ form.description.label }}
 	<p>
-		{{ form.description.label }} {{ form.description(placeholder="enter..") }}
+	{{ form.description(placeholder="enter..") }}
 	</p>
 	{% for error in form.description.errors %}
 	<span style="color: red">{{ error }}</span>
