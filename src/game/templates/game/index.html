@@ -12,7 +12,7 @@
 	<div class="row row-cols-auto">
 		{% for game in games %}
 		<div class="col">title: 
-			<a href="{{ url_for('home.home_game', filename=game.upload_path, game_id=game.id) }}">
+			<a href="{{ url_for('home.home_game', game_id=game.id) }}">
 				{{ game.title }}
 			</a>
 			<div class="about">by {{ game.user.username }} on {{ game.created_at.strftime('%m/%d %H:%M') }}</div>
