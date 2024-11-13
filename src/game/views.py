@@ -78,15 +78,16 @@ def upload_file():
 				return redirect(url_for('game.index', game_id=game.id))
 	return render_template("game/upload.html", form=form)
 
-@game.route("/show/<int:game_id>")
-def show_game(game_id):
+@game.route("/show/<int:game_id>/<path:filename>")
+# @game.route("/show/<int:game_id>", defaults={"filename": "index.html"})
+def show_game(game_id, filename="index.html"):
 	game = Game.query.get_or_404(game_id)
 	extract_folder = Path(current_app.config['UPLOAD_FOLDER']) / game.upload_path.split(".")[0]
 	if extract_folder.is_dir():
 		# Serve the index.html if present in extracted ZIP
-		index_file = list(extract_folder.glob("index.html"))
-		if index_file:
-			return send_from_directory(extract_folder, "index.html")
+		file_path = extract_folder / filename
+		if file_path.exists():
+			return send_from_directory(extract_folder, filename)
 		else:
 			abort(404, description="No index.html file found in extracted folder.")
 	# Serve a non-zip file directly
@@ -127,7 +128,7 @@ def download_file(path):
 
 @game.route("<int:game_id>/delete", methods=["POST"])
 @login_required
-def delete_game(game_id):
+def delete_game(game_id, filename="index.html"):
 	# Fetch game entry from the database
 	game = Game.query.filter_by(id=game_id, user_id=current_user.id).first()
 
@@ -141,22 +142,21 @@ def delete_game(game_id):
 	extract_folder = Path(current_app.config['UPLOAD_FOLDER']) / game.upload_path.split(".")[0]
 
 	# Attempt to delete the file if it exists
-	if file_path.exists():
+	if file_path.exists() and file_path.is_dir():
+		try:
+			shutil.rmtree(file_path)
+			current_app.logger.info(f"Deleted folder: {file_path}")
+		except Exception as e:
+			flash(f"Error deleting directory: {e}", "error")
+			current_app.logger.error(f"Error deleting extract_folder {file_path}: {e}")
+			return redirect(url_for("game.index"))
+	else:
 		try:
 			os.remove(file_path)
 			current_app.logger.info(f"Deleted file: {file_path}")
 		except Exception as e:
 			flash(f"Error deleting file: {e}", "error")
-			current_app.logger.error(f"Error deleting folder {file_path}: {e}")
-			return redirect(url_for("game.index"))
-
-	if extract_folder.exists() and extract_folder.is_dir():
-		try:
-			shutil.rmtree(extract_folder)
-			current_app.logger.info(f"Deleted folder: {extract_folder}")
-		except Exception as e:
-			flash(f"Error deleting file: {e}", "error")
-			current_app.logger.error(f"Error deleting folder {extract_folder}: {e}")
+			current_app.logger.error(f"Error deleting nonzip_file {file_path}: {e}")
 			return redirect(url_for("game.index"))
 
 	# Delete game entry from the database
