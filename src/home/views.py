@@ -12,12 +12,14 @@ home = Blueprint('home', __name__, template_folder="templates", static_folder="s
 
 @home.route('/')
 def index():
-	context = get_home_context()
-	return render_template('home/index.html', **context)
+
+    context = get_home_context()
+    return render_template('home/index.html', **context)
 
 
 @home.route('/game/<int:game_id>')
 def home_game(game_id):
+    
     # `game_id`를 통해 데이터베이스에서 해당 게임을 조회
     game = Game.query.get_or_404(game_id)  # 존재하지 않는 게임이면 404 반환
 

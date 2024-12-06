@@ -27,11 +27,11 @@ ENV GAME_FILE_URL "/storage/files/game_file/"
 EXPOSE 5002
 
 # Volumes for data persistence
-VOLUME [ "/usr/app/src/files/game_file", "/usr/app/local.sqlite" ]
+VOLUME [ "/usr/app/src/files/game_file" ]
 
 # docker run
-CMD ["flask", "run", "-h", "0.0.0.0"]
+# CMD ["flask", "run", "-h", "0.0.0.0"]
 
 # Start the application using Gunicorn
-# RUN pip install gunicorn
-# CMD ["gunicorn", "-b", "0.0.0.0:5002", "src.app:create_app('local')"]
+RUN pip install gunicorn
+CMD ["gunicorn", "-b", "0.0.0.0:5002", "src.app:create_app('local')"]

@@ -46,6 +46,9 @@ def create_app(config_key):
 	from src.chat.events import ChatNamespace
 	socketio.on_namespace(ChatNamespace('/chat'))
 
+	app.register_error_handler(404, page_not_found)
+	app.register_error_handler(500, internal_server_error)
+
 	@app.route("/", methods=["GET"])
 	def main():
 		return render_template("home/index.html")
@@ -57,3 +60,9 @@ if __name__ == "__chat__":
 	config_key = "local"  # Adjust this to use an environment variable if needed
 	app = create_app(config_key)
 	socketio.run(app, host="127.0.0.1", port=5002, debug=True)
+
+def page_not_found(e):
+	return render_template("404.html"), 404
+
+def internal_server_error(e):
+	return render_template("500.html"), 500

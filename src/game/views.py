@@ -97,8 +97,8 @@ def show_game(game_id, filename="index.html"):
 
 @game.route('/download/<path:path>')
 def download_file(path):
-    # 경로 유효성 검사 및 파일 존재 여부 확인
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], path, as_attachment=True)
+	# 경로 유효성 검사 및 파일 존재 여부 확인
+	return send_from_directory(current_app.config['UPLOAD_FOLDER'], path, as_attachment=True)
 
 # Route to display the uploaded game
 # @game.route("<filename>/<int:game_id>")
