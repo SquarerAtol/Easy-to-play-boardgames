@@ -30,8 +30,8 @@ EXPOSE 5002
 VOLUME [ "/usr/app/src/files/game_file" ]
 
 # docker run
-# CMD ["flask", "run", "-h", "0.0.0.0"]
+CMD ["flask", "run", "-h", "0.0.0.0", "-p", "5002"]
 
 # Start the application using Gunicorn
-RUN pip install gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:5002", "src.app:create_app('local')"]
+# RUN pip install gunicorn
+# CMD ["gunicorn", "-b", "0.0.0.0:5002", "src.app:create_app('local')"]

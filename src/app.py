@@ -56,10 +56,10 @@ def create_app(config_key):
 	return app
 
 
-if __name__ == "__chat__":
+if __name__ == "__main__":
 	config_key = "local"  # Adjust this to use an environment variable if needed
 	app = create_app(config_key)
-	socketio.run(app, host="127.0.0.1", port=5002, debug=True)
+	socketio.run(app, host="0.0.0.0", port=5002, debug=True)
 
 def page_not_found(e):
 	return render_template("404.html"), 404
