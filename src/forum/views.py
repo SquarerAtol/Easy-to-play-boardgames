@@ -13,6 +13,7 @@ forum = Blueprint("forum", __name__, template_folder="templates", static_folder=
 
 @forum.route("/")
 def index():
+	# forum page: 내림차순 정렬
 	posts_query = (
 		select(Post)
 		.join(User, User.id == Post.user_id)
@@ -24,19 +25,13 @@ def index():
 	create_form = PostForm()
 	
 	return render_template("forum/index.html", posts=posts, delete_form=delete_form,
-                        create_form=create_form)
-
-	# posts = (
-    #     db.session.query(User, Post)
-    #     .join(Post)
-    #     .filter(User.id == Post.user_id)
-    #     .all()
-    # )
+						create_form=create_form)
 
 
 @forum.route("/create", methods=["POST", "GET"])
 @login_required
 def create_post():
+	# post 작성
 	form = PostForm()
 	if request.method == 'POST':
 
@@ -53,15 +48,31 @@ def create_post():
 	return render_template("forum/create.html", form=form,)
 
 
-# def get_post(id):
-# 	post = db.session.query(Post).join(User).filter(Post.id == id).first()
+@forum.route("/reply/<int:post_id>", methods=["POST", "GET"])
+@login_required
+def reply_post(post_id):
+	# reply post
+	form = PostForm()
+	parent_post = Post.query.get_or_404(post_id)
 
-# 	return post
+	if request.method == 'POST':
+		if form.validate_on_submit():
+			reply = Post(
+				body=form.body.data,
+				user_id=current_user.id,
+				parent_id=parent_post.id
+			)
+			db.session.add(reply)
+			db.session.commit()
+			
+			return redirect(url_for("forum.index",post_id=parent_post.id))
+	return render_template("forum/index.html",form=form, parent_post=parent_post)
 
 
 @forum.route("/<int:post_id>/update", methods=["POST", "GET"])
 @login_required
 def edit_post(post_id):
+	# post 수정
 	post = Post.query.filter_by(id=post_id).first()
 
 	if post is None:
@@ -84,6 +95,7 @@ def edit_post(post_id):
 @forum.route("<int:post_id>/delete", methods=["POST"])
 @login_required
 def delete_post(post_id):
+	# post 삭제
 	post = Post.query.filter_by(id=post_id).first()
 
 	if not post:

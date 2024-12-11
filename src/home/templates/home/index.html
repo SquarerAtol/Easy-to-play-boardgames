@@ -8,7 +8,13 @@
 				<iframe src="{{ url_for('game.show_game', game_id=game.id, filename='index.html') }}" 
 						style="width: 100%; height: 80vh; border: none;">
 					지원하지 않는 브라우저입니다.
-				</iframe>
+				</iframe><br>
+				<details>
+					<summary style="font-size:x-large;">게임 설명 보기</summary>
+					<p>
+						{{ game.description }}
+					</p>
+				</details><br>
 			{% else %}
 				<img src="{{ url_for('static', filename='banner.png') }}" style="width: 100%; height: auto;">
 				<p>실행 중인 게임 없음 <a href="{{ url_for('game.index') }}">more</a></p>
@@ -29,10 +35,6 @@
 						</div>
 						{% if current_user.is_authenticated and current_user.id == post.user.id %}
 						<a class="action" href="{{ url_for('forum.edit_post', post_id=post.id) }}">Edit</a>
-						<!-- <form action="{{ url_for('forum.delete_post', post_id=post.id) }}" method="POST">
-							{{ delete_form.csrf_token }}
-							<input class="danger" type="submit" value="Delete" onclick="return confirm('정말 삭제하겠습니까?');">
-						</form> -->
 						{% endif %}
 					</header>
 					<p class="body">{{ post.body }}</p>

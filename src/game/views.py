@@ -40,7 +40,7 @@ def upload_file():
 			file_path = Path(current_app.config['UPLOAD_FOLDER']) / filename
 			upload_file.save(file_path)
 
-			# Handle ZIP extraction with error handling
+			# zip파일 압축 해제
 			if filename.lower().endswith(".zip"):
 				extract_folder = Path(current_app.config['UPLOAD_FOLDER']) / filename.split(".")[0]
 				extract_folder.mkdir(parents=True, exist_ok=True)
@@ -56,9 +56,9 @@ def upload_file():
 					)
 					db.session.add(game)
 					db.session.commit()
-					flash("File uploaded successfully!", "success")
+					flash("파일을 성공적으로 업로드 했습니다.", "success")
 				except zipfile.BadZipFile:
-					flash("Uploaded file is not a valid ZIP file.", "error")
+					flash("잘못된 zip파일입니다.", "error")
 					file_path.unlink(missing_ok=True)
 					return url_for(redirect('game.upload_file'))
 				finally:
@@ -73,7 +73,7 @@ def upload_file():
 				)
 				db.session.add(game)
 				db.session.commit()
-				flash("File uploaded successfully!", "success")
+				flash("파일을 성공적으로 업로드 했습니다", "success")
 				current_app.logger.info(f"'{filename}', path: '{file_path}'")
 				return redirect(url_for('game.index', game_id=game.id))
 	return render_template("game/upload.html", form=form)
@@ -89,7 +89,7 @@ def show_game(game_id, filename="index.html"):
 		if file_path.exists():
 			return send_from_directory(extract_folder, filename)
 		else:
-			abort(404, description="No index.html file found in extracted folder.")
+			abort(404, description="압축 파일 내 index.html 파일이 없음.")
 	# Serve a non-zip file directly
 	else:
 		return send_from_directory(current_app.config['UPLOAD_FOLDER'], game.upload_path)
@@ -100,32 +100,6 @@ def download_file(path):
 	# 경로 유효성 검사 및 파일 존재 여부 확인
 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], path, as_attachment=True)
 
-# Route to display the uploaded game
-# @game.route("<filename>/<int:game_id>")
-# def zip_file(game_id, filename):
-# 	game = Game.query.get(game_id)
-# 	if not game:
-# 		abort(404)
-# 		current_app.logger.info(f"'nonzipfile 로그 game: {game}', id: '{game_id}'")
-# 	extract_folder = Path(current_app.config['UPLOAD_FOLDER']) / filename.split(".")[0]
-# 	index_file = extract_folder / '*.html'
-# 	if not extract_folder.is_dir() or not index_file.is_file():
-# 		abort(404)
-# 		current_app.logger.info(f"'zipfile 로그 {extract_folder}', index file: '{index_file}', id:'{game_id}'")
-# 	current_app.logger.info(f"'{extract_folder}', index file: '{index_file}', id:'{game_id}'")
-# 	return send_from_directory(extract_folder, '*.html')
-
-
-# # Serve the uploaded files
-# @game.route('/<filename>/<int:game_id>')
-# def nonzip_file(game_id, filename):
-# 	game = Game.query.get(game_id)
-# 	if not game:
-# 		current_app.logger.error(f"'nonzip_file 로그 game: {game}', id: '{game_id}'")
-# 	current_app.logger.debug(f"'{filename}', id: '{game_id}'")
-# 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
-
-
 @game.route("<int:game_id>/delete", methods=["POST"])
 @login_required
 def delete_game(game_id, filename="index.html"):
@@ -133,7 +107,7 @@ def delete_game(game_id, filename="index.html"):
 	game = Game.query.filter_by(id=game_id, user_id=current_user.id).first()
 
 	if not game:
-		flash("Game not found", "error")
+		flash("파일을 찾을 수 없습니다.", "error")
 		return redirect(url_for("game.index"))
 
 

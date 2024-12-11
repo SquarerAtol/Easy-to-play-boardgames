@@ -1,67 +1,66 @@
 <html>
-<head>
-	<title>Chat Room</title>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		var socket;
-		$(document).ready(function() {
-			socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
-			
-			// Handle connection event
-			socket.on('connect', function() {
-				socket.emit('joined', {data: 'User connected'});  // Match this with your server's 'joined' event handler
-			});
-			
-			// Handle status updates
-			socket.on('status', function(data) {
-				$('#chat').val($('#chat').val() + '<' + data.message + '>\n');
-				$('#chat').scrollTop($('#chat')[0].scrollHeight);
-			});
-			
-			// Handle messages
-			socket.on('message', function(data) {
-				$('#chat').val($('#chat').val() + data.message + '\n');
-				$('#chat').scrollTop($('#chat')[0].scrollHeight);
-			});
-			
-			// Send message on Enter key press
-			$('#text').keypress(function(e) {
-				var code = e.keyCode || e.which;
-				if (code == 13) {  // Enter key
-					e.preventDefault();  // Prevent newline in the input
-					const text = $('#text').val().trim();
-					if (text !== '') {  // Only emit if text is not empty
-						socket.emit('text', {message: text});
-						$('#text').val('');  // Clear the input field
-					} else {
-						alert('Message cannot be empty.');
+	<head>
+		<title>Chat</title>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="*"></script>
+		<script type="text/javascript">
+			var socket;
+			$(document).ready(function() {
+				socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+
+				// 연결 이벤트 핸들러
+				socket.on('connect', function() {
+					socket.emit('joined', {data: 'User connected'});  // 서버와 연결할 때 이벤트
+				});
+
+				// 상태 핸들러
+				socket.on('status', function(data) {
+					$('#chat').val($('#chat').val() + '<' + data.message + '>\n');
+					$('#chat').scrollTop($('#chat')[0].scrollHeight);
+				});
+
+				// 메시지 핸들러
+				socket.on('message', function(data) {
+					$('#chat').val($('#chat').val() + data.message + '\n');
+					$('#chat').scrollTop($('#chat')[0].scrollHeight);
+				});
+
+				// Enter 눌렀을 때 이벤트 핸들러
+				$('#text').keypress(function(e) {
+					var code = e.keyCode || e.which;
+					if (code == 13) {  // Enter
+						e.preventDefault();  // 줄 넘기기 방지
+						const text = $('#text').val().trim();
+						if (text !== '') {  // 빈 텍스트 방지
+							socket.emit('text', {message: text});
+							$('#text').val('');  // 텍스트 입력 초기화
+						} else {
+							alert('메시지가 없습니다.');
+						}
 					}
-				}
+				});
 			});
-		});
-	</script>
-</head>
-<body>
-	{% if current_user.is_authenticated %}
-		<p>{{ current_user.username }}</p>
-	{% else %}
-	<form action="{{ url_for('chat.index') }}" method="post" novalidate="novalidate">
-		{{ form.csrf_token }}
+		</script>
+	</head>
+	<body>
+		{% if current_user.is_authenticated %}
+			<p>{{ current_user.username }}</p>
+		{% else %}
+		<form action="{{ url_for('chat.index') }}" method="post" novalidate="novalidate">
+			{{ form.csrf_token }}
+			<p>
+				사용자 <input type = "text" name = "name" placeholder="{{ name }}" required/>
+				<input type="submit" value="입력">
+			</p>
+			{% if not name %}
+				<p style="color: red;">사용자 이름을 입력하세요.</p>
+			{% endif %}
+		</form>
 		<p>
-			사용자 <input type = "text" name = "name" required/>
-			<input type="submit" value="입력">
+			현재 사용자: {{ name }}
 		</p>
-		{% if not name %}
-			<p style="color: red;">사용자 이름을 입력하세요.</p>
 		{% endif %}
-	</form>
-	<p>
-		현재 사용자: {{ name }}
-	</p>
-	{% endif %}
-	<input placeholder="Type message and ENTER" size="40" id="text"><br><br>
-	<textarea cols="40" rows="15" id="chat" readonly></textarea><br><br>
-	<!-- <a href="#" onclick="leave_room();">Exit</a> -->
-</body>
+		<input placeholder="메시지를 입력받아 Enter를 누르면 출력합니다." size="40" id="text"><br><br>
+		<textarea cols="40" rows="15" id="chat" readonly></textarea><br><br>
+	</body>
 </html>

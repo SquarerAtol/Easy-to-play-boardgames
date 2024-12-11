@@ -23,9 +23,9 @@ class ChatNamespace(Namespace):
 		room = session.get('room')
 		if room and name:
 			join_room(room)
-			emit('status', {'message': f'{name} has joined.'}, room=room)
+			emit('status', {'message': f'"{name}" 가 채팅에 참여합니다.'}, room=room)
 		if name == '':
-			emit('error', {'message': 'Name is missing. Please try again.'})
+			emit('error', {'message': 'name missing'})
 			return
 
 	def on_text(self, data):
@@ -37,7 +37,7 @@ class ChatNamespace(Namespace):
 		if room and name:
 			emit('message', {'message': f"{name}: {data['message']}"}, room=room)
 		if not data.get('message', '').strip():
-			emit('error', {'message': "Message can't be blank. Please enter some text."})
+			emit('error', {'message': "message missing"})
 			return
 
 	def on_left(self, data):

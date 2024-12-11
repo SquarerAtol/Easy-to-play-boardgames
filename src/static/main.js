@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   });
 
-  // Ensure margin-left is reset when resizing the window
+  // 사이드 메뉴 크기 조절
   window.addEventListener("resize", function() {
       if (window.innerWidth >= 1360) {
           mainContent.style.marginLeft = "0";

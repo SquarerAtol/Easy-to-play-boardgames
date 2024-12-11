@@ -12,7 +12,7 @@ def index():
 	if request.method == 'POST':
 		if form.validate_on_submit():
 			session['name'] = request.form.get('name', '').strip()
-			session['room'] = request.form.get('room', '0').strip()  # Default room to '0' if not provided
+			session['room'] = request.form.get('room', '0').strip()
 
 	name = session.get('name', '')
 	room = session.get('room', '0')

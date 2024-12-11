@@ -14,15 +14,6 @@ def index():
 	return render_template("crud/index.html")
 
 
-@crud.route("/sql")
-@login_required
-def sql():
-	db.session.query(User).all()
-	for user in users:
-		print(user)
-	return "check the console log"
-
-
 @crud.route("/users/new", methods=["POST", "GET"])
 @login_required
 def create_user():
@@ -44,6 +35,7 @@ def create_user():
 
 @crud.route("/users")
 def users():
+    # all user
 	users = User.query.all()
 	for user in users:
 		user.masked_email = mask_email(user.email)
@@ -59,17 +51,17 @@ def mask_email(email):
 		masked_name = name[0] + '*'
 	return masked_name + '@' + domain
 
-
 @crud.route("/own")
 @login_required
 def own():
+	# personal user
 	own = User.query.filter(User.id == current_user.id).all()
 	return render_template("crud/own.html", own=own)
-
 
 @crud.route("/own/<int:user_id>", methods=["GET", "POST"])
 @login_required
 def edit_user(user_id):
+	# user update
 	form = UserForm()
 
 	user = User.query.filter_by(id=user_id).first()
@@ -89,6 +81,7 @@ def edit_user(user_id):
 @crud.route("own/<int:user_id>/delete", methods=["POST"])
 @login_required
 def delete_user(user_id):
+    # user delete
 	flash("completely deleted")
 	user = User.query.filter_by(id=user_id).first()
 	db.session.delete(user)

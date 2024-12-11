@@ -30,7 +30,7 @@
 				{% if current_user.id == post.user.id and current_user.is_authenticated %}
 				<a href="{{ url_for('forum.edit_post', post_id=post.id) }}">Edit</a>
 				{% else %}
-				<a href="{{ url_for('forum.index', post_id=post.id) }}">Reply</a>
+				<a href="{{ url_for('forum.reply_post', post_id=post.id) }}">Reply</a>
 				{% endif %}
 			</p>
 		</div>

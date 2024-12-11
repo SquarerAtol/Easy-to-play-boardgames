@@ -3,6 +3,7 @@
 {% block content %}
 <div class="p-3">
 <h2>Games</h2>
+게임을 업로드하고, 그 중 하나를 선택해 플레이합니다.
 <div>
 	<form action="{{ url_for('game.upload_file') }}">
 		<input type="submit" value="upload">
@@ -25,8 +26,3 @@
 	</div>
 </div>
 {% endblock %}
-
-		<!-- <div class="about">by {{ game.user.username }} on {{ game.created_at.strftime('%m/%d %H:%M') }}</div>
-		if current_user.is_authenticated and current_user.id == game.user.id 
-		<a class="action" href="{{ url_for('game.edit_game', game_id=game.id) }}">Edit</a>
-		endif -->
