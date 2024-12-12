@@ -8,6 +8,7 @@ chat = Blueprint("chat", __name__, template_folder="templates")
 
 @chat.route('/', methods=['GET', 'POST'])
 def index():
+    # username을 form으로 전달, room은 0으로 고정
 	form = ChatForm()
 	if request.method == 'POST':
 		if form.validate_on_submit():

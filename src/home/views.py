@@ -12,7 +12,6 @@ home = Blueprint('home', __name__, template_folder="templates", static_folder="s
 
 @home.route('/')
 def index():
-
     context = get_home_context()
     return render_template('home/index.html', **context)
 
@@ -20,15 +19,13 @@ def index():
 @home.route('/game/<int:game_id>')
 def home_game(game_id):
     
-    # `game_id`를 통해 데이터베이스에서 해당 게임을 조회
-    game = Game.query.get_or_404(game_id)  # 존재하지 않는 게임이면 404 반환
-
-    # 로그 기록
-    current_app.logger.debug(f"homegame log debug id: '{game_id}'")
+    # game_id를 통해 db에서 게임을 조회
+    game = Game.query.get_or_404(game_id)
+    # current_app.logger.debug(f"homegame log debug id: '{game_id}'")
 
     # 데이터 로드
     context = get_home_context()
-    context.update({"game": game})  # `game`만 전달
+    context.update({"game": game})  # game만 전달
 
     return render_template('home/index.html', **context)
 

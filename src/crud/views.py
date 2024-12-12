@@ -14,28 +14,9 @@ def index():
 	return render_template("crud/index.html")
 
 
-@crud.route("/users/new", methods=["POST", "GET"])
-@login_required
-def create_user():
-	form = UserForm()
-
-	if form.validate_on_submit():
-		user = User(
-			username=form.username.data,
-			email=form.email.data,
-			password=form.password.data,
-		)
-
-		db.session.add(user)
-		db.session.commit()
-
-		return redirect(url_for("crud.users"))
-	return render_template("crud/create.html", form=form)
-
-
 @crud.route("/users")
 def users():
-    # all user
+    # 가입한 모든 유저를 표시하는 함수
 	users = User.query.all()
 	for user in users:
 		user.masked_email = mask_email(user.email)
@@ -54,14 +35,14 @@ def mask_email(email):
 @crud.route("/own")
 @login_required
 def own():
-	# personal user
+	# 유저 개인 페이지
 	own = User.query.filter(User.id == current_user.id).all()
 	return render_template("crud/own.html", own=own)
 
 @crud.route("/own/<int:user_id>", methods=["GET", "POST"])
 @login_required
 def edit_user(user_id):
-	# user update
+	# 유저의 개인 정보를 수정
 	form = UserForm()
 
 	user = User.query.filter_by(id=user_id).first()
@@ -81,7 +62,7 @@ def edit_user(user_id):
 @crud.route("own/<int:user_id>/delete", methods=["POST"])
 @login_required
 def delete_user(user_id):
-    # user delete
+    # 유저 삭제
 	flash("completely deleted")
 	user = User.query.filter_by(id=user_id).first()
 	db.session.delete(user)

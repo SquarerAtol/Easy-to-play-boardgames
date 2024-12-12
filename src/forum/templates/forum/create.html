@@ -13,7 +13,7 @@
 	{% endfor %}
 		{{ form.body.label }}
 	<p>
-		{{ form.body(placeholder="enter..") }}
+		{{ form.body(placeholder="write..") }}
 	</p>
 	{% for error in form.body.errors %}
 	<span style="color: red">{{ error }}</span>

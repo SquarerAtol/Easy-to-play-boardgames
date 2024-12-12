@@ -16,6 +16,7 @@ class ChatNamespace(Namespace):
 		emit('my response', data)
 
 	def on_joined(self, data):
+		# user의 name을 채팅 텍스트에 표시할 수 있도록 전달
 		if current_user.is_authenticated:
 			name = current_user.username
 		else:
@@ -29,6 +30,7 @@ class ChatNamespace(Namespace):
 			return
 
 	def on_text(self, data):
+		# 유저의 메시지가 텍스트에 표시될 수 있도록 함
 		if current_user.is_authenticated:
 			name = current_user.username
 		else:
@@ -41,6 +43,7 @@ class ChatNamespace(Namespace):
 			return
 
 	def on_left(self, data):
+		# user의 연결이 끊어질 때 처리
 		if current_user.is_authenticated:
 			name = current_user.username
 		else:

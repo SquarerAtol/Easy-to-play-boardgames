@@ -17,16 +17,16 @@ socketio = SocketIO(logger=True, engineio_logger=True)
 
 def create_app(config_key):
 	app = Flask(__name__)
-	# config.py
+	# app 설정: /config.py
 	app.config.from_object(config[config_key])
 
 	db.init_app(app)	# db 초기화
-	Migrate(app, db, render_as_batch=True)	# db migrate
+	Migrate(app, db, render_as_batch=False)	# db migrate
 	csrf.init_app(app)	# csrf_token 적용
 	login_manager.init_app(app)	# login manager
 	socketio.init_app(app)	# socketio
 
-	# 기능별 blueprint
+	# 기능 별 blueprint을 app에 등록하여 사용
 	from src.crud.views import crud
 	app.register_blueprint(crud, url_prefix="/crud")
 
@@ -48,10 +48,6 @@ def create_app(config_key):
 	from src.chat.events import ChatNamespace
 	socketio.on_namespace(ChatNamespace('/chat'))
 
-	# 에러 페이지에 대한 처리
-	app.register_error_handler(404, page_not_found)
-	app.register_error_handler(500, internal_server_error)
-
 	@app.route("/", methods=["GET"])
 	def main():
 		return render_template("home/index.html")
@@ -63,9 +59,3 @@ if __name__ == "__main__":
 	config_key = "local"
 	app = create_app(config_key)
 	socketio.run(app, host="0.0.0.0", port=5002, debug=True)
-
-def page_not_found(e):
-	return render_template("404.html"), 404
-
-def internal_server_error(e):
-	return render_template("500.html"), 500

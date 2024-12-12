@@ -1,0 +1,38 @@
+{% extends 'home/base.html' %}
+{% block title %}New Post{% endblock %}
+{% block content %}
+<div class="reply-container">
+    <h3>Re: {{ parent_post.id }}. {{ parent_post.title }}</h3>
+
+    <div class="original-post">
+        <p>{{ parent_post.body }}</p>
+        <small>By {{ parent_post.user.username }} on {{ parent_post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+    </div>
+
+    <form action="{{ url_for('forum.reply_post', post_id=parent_post.id) }}" method="POST" novalidate="novalidate" class="reply-form">
+		{{ form.hidden_tag() }}
+        
+		<div class="form-group">
+		{{ form.csrf_token }}
+
+		<input readonly {{ form.title }}>
+		{% for error in form.title.errors %}
+		<span style="color: red">{{ error }}</span>
+		{% endfor %}
+
+		<p>{{ form.body.label }}</p>
+            {{ form.body(class="form-control", placeholder="write..") }}
+            
+            {% if form.body.errors %}
+                {% for error in form.body.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+	<form action="{{ url_for('forum.index') }}">
+		<input type="submit" value="back" class="btn btn-danger">
+	</form>
+</div>
+{% endblock %}

@@ -2,19 +2,37 @@
 {% block title %}Forum{% endblock %}
 {% block content %}
 <div class="p-3">
-<h2>Forum</h2>
-<div class="d-flex flex-row-reverse">
-	<form action="{{ url_for('forum.create_post', post_id=posts.id) }}" method="POST">
-		{{ create_form.csrf_token }}
-		{% if current_user.is_authenticated %}
-		{{ create_form.submit(class="btn btn-primary") }}
-		{% endif %}
-	</form>
-</div>
-{% for post in posts %}
-<div class="card col-md-12">
+	<h2>Forum</h2>
+	{% if reply %}
+	<div class="d-flex flex-row-reverse">
+		{% for reply in posts %}
+		<div class="card col-md-1">
+			{{ reply.body }}
+			<div class="d-flex flex-row-reverse">
+				{% if current_user.is_authenticated and current_user.id == reply.user.id %}
+				<form action="{{ url_for('forum.delete_post', post_id=reply.id) }}" method="POST">
+					{{ delete_form.csrf_token }}
+					<input type="submit" value="삭제" onclick="return confirm('정말 삭제하겠습니까?');">
+				</form>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+	</div>
+	<div class="d-flex flex-row-reverse">
+		<form action="{{ url_for('forum.create_post', post_id=posts.id) }}" method="POST">
+			{{ create_form.csrf_token }}
+			{% if current_user.is_authenticated %}
+			{{ create_form.submit(class="btn btn-primary") }}
+			{% endif %}
+		</form>
+	</div>
+	{% for post in posts %}
+	<div class="card col-md-12">
 		<header class="d-flex justify-content-between">
-			<h2>{{ post.title }}</h2>
+			<h2>{{ post.id }}.&nbsp;{{ post.title }}</h2>
 			<div class="d-flex">
 				{% if current_user.is_authenticated and current_user.id == post.user.id %}
 				<form action="{{ url_for('forum.delete_post', post_id=post.id) }}" method="POST">
@@ -25,18 +43,75 @@
 			</div>
 		</header>
 		<hr>
-		<div class="d-flex flex-row">
-			<p class="body">{{ post.body }}&nbsp;
-				{% if current_user.id == post.user.id and current_user.is_authenticated %}
-				<a href="{{ url_for('forum.edit_post', post_id=post.id) }}">Edit</a>
-				{% else %}
-				<a href="{{ url_for('forum.reply_post', post_id=post.id) }}">Reply</a>
-				{% endif %}
-			</p>
+		<div class="d-flex flex-row post-container">
+			<div class="post-body">
+				<p>{{ post.body }}</p>
+				<div class="post-actions">
+					{% if current_user.is_authenticated %}
+					{% if current_user.id == post.user.id %}
+						<a href="{{ url_for('forum.edit_post', post_id=post.id) }}" class="btn btn-sm btn-edit">
+							Edit
+						</a>
+						{% else %}
+						<a href="{{ url_for('forum.reply_post', post_id=post.id) }}" class="btn btn-sm btn-reply" onclick="prepareReply(this)">
+							Reply
+						</a>
+					{% endif %}
+					{% endif %}
+				</div>
+			</div>
 		</div>
 		<div class="d-flex flex-row-reverse">
-			<div class="about">by {{ post.user.username }} on {{ post.created_at.strftime('%m/%d %H:%M') }}</div>
+			<small>by {{ post.user.username }} on {{ post.created_at.strftime('%m/%d %H:%M') }}</small>
 		</div>
-</div>
-{% endfor %}
+	</div>
+	{% endfor %}
+
+<!-- 페이징 시작 -->
+<ul class="pagination justify-content-center">
+	<!-- 이전 페이지 -->
+	{% if pagination.has_prev %}
+	<li class="page-item">
+		<a class="page-link" href="{{ url_for('forum.index', page=pagination.prev_num) }}" aria-label="Previous">
+			이전
+		</a>
+	</li>
+	{% else %}
+	<li class="page-item disabled">
+		<span class="page-link" aria-disabled="true">이전</span>
+	</li>
+	{% endif %}
+	<!-- 페이지 넘버 -->
+	{% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+		{% if page_num %}
+			{% if page_num == pagination.page %}
+			<li class="page-item active" aria-current="page">
+				<span class="page-link">{{ page_num }}</span>
+			</li>
+			{% else %}
+			<li class="page-item">
+				<a class="page-link" href="{{ url_for('forum.index', page=page_num) }}">{{ page_num }}</a>
+			</li>
+			{% endif %}
+		{% else %}
+		<li class="page-item disabled">
+			<span class="page-link">...</span>
+		</li>
+		{% endif %}
+	{% endfor %}
+	
+	<!-- 다음 페이지 -->
+	{% if pagination.has_next %}
+	<li class="page-item">
+		<a class="page-link" href="{{ url_for('forum.index', page=pagination.next_num) }}" aria-label="Next">
+			다음
+		</a>
+	</li>
+	{% else %}
+	<li class="page-item disabled">
+		<span class="page-link" aria-disabled="true">다음</span>
+	</li>
+	{% endif %}
+</ul>
+<!-- 페이징 끝 -->
 {% endblock %}

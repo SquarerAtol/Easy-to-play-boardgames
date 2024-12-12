@@ -13,19 +13,21 @@ forum = Blueprint("forum", __name__, template_folder="templates", static_folder=
 
 @forum.route("/")
 def index():
-	# forum page: 내림차순 정렬
+	# forum page: 내림차순 정렬, 페이징
+	page = request.args.get('page', type=int, default=1)
+	per_page = 5
 	posts_query = (
-		select(Post)
+		db.session.query(Post)
 		.join(User, User.id == Post.user_id)
 		.order_by(desc(Post.created_at))
 	)
-	posts = db.session.execute(posts_query).scalars().all()
+	pagination = posts_query.paginate(page=page, per_page=per_page)
+	posts = pagination.items
 
 	delete_form = DeleteForm()
 	create_form = PostForm()
 	
-	return render_template("forum/index.html", posts=posts, delete_form=delete_form,
-						create_form=create_form)
+	return render_template("forum/index.html", posts=posts, pagination=pagination, delete_form=delete_form,create_form=create_form)
 
 
 @forum.route("/create", methods=["POST", "GET"])
@@ -48,16 +50,18 @@ def create_post():
 	return render_template("forum/create.html", form=form,)
 
 
-@forum.route("/reply/<int:post_id>", methods=["POST", "GET"])
+@forum.route("/<int:post_id>/reply", methods=["POST", "GET"])
 @login_required
 def reply_post(post_id):
 	# reply post
-	form = PostForm()
 	parent_post = Post.query.get_or_404(post_id)
+	form = PostForm()
+	form.title.data=f"Re: {parent_post.id}. {parent_post.title}"
 
 	if request.method == 'POST':
 		if form.validate_on_submit():
 			reply = Post(
+				title=form.title.data,
 				body=form.body.data,
 				user_id=current_user.id,
 				parent_id=parent_post.id
@@ -65,8 +69,8 @@ def reply_post(post_id):
 			db.session.add(reply)
 			db.session.commit()
 			
-			return redirect(url_for("forum.index",post_id=parent_post.id))
-	return render_template("forum/index.html",form=form, parent_post=parent_post)
+			return redirect(url_for("forum.index"))
+	return render_template("forum/reply.html",form=form, parent_post=parent_post,)
 
 
 @forum.route("/<int:post_id>/update", methods=["POST", "GET"])
