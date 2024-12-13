@@ -21,6 +21,7 @@ class ChatNamespace(Namespace):
 			name = current_user.username
 		else:
 			name = session.get('name')
+		# 공통 room 설정
 		room = session.get('room')
 		if room and name:
 			join_room(room)
