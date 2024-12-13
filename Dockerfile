@@ -11,11 +11,11 @@ RUN apt-get update && \
 # container working dir
 WORKDIR /usr/app/
 
-# Copy requirements and install dependencies
+# requirements 복사, 의존성 설치
 COPY ./requirements.txt /usr/app/requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy application files
+# app 파일 복사
 COPY ./src /usr/app/src
 COPY ./local.sqlite /usr/app/local.sqlite
 
@@ -26,12 +26,10 @@ ENV GAME_FILE_URL "/storage/files/game_file/"
 # port
 EXPOSE 5002
 
-# Volumes for data persistence
+# 데이터 보존 volumes
 VOLUME [ "/usr/app/src/files/game_file" ]
+
+# CMD ["python", "app.py"]
 
 # docker run
 CMD ["flask", "run", "-h", "0.0.0.0", "-p", "5002"]
-
-# Start the application using Gunicorn
-# RUN pip install gunicorn
-# CMD ["gunicorn", "-b", "0.0.0.0:5002", "src.app:create_app('local')"]

@@ -43,3 +43,24 @@ $ flask db upgrade
 ```
 $ flask run
 ```
+## feature
+src/app.py : 어플리케이션 실행 파일입니다.
+
+
+src/config.py : 환경설정 파일입니다.
+
+
+src/*/views.py : 비즈니스 도메인에 따라 분류하여 도메인의 기능 작동을 기술한 파일입니다.
+
+
+src/*/templates/*.py : 화면에 출력 될 Jinja 기반의 html 파일입니다.
+
+
+src/*/model.py : 데이터베이스에 입력 할 테이블 설정입니다.
+### 15주차 수정사항
+
+
+forum의 게시물에 답글을 적을 수 있는 reply 기능을 추가했습니다.
+
+
+forum의 게시물을 5개까지 표현하고 다음 페이지로 넘기는 paging 처리를 추가했습니다.

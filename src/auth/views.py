@@ -36,7 +36,7 @@ def register():
 		# 로그인 상태로 연결
 		login_user(user)
 
-		next_ = request.args.get("next")
+		next_ = request.args.get("next")	# user 데이터를 http get했을 때 상태 처리
 		if next_ is None or not next_.startswith("/"):
 			next_ = url_for("home.index")
 		return redirect(next_)

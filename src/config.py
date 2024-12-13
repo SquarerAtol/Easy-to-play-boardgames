@@ -5,8 +5,8 @@ basedir = Path(__file__).parent.parent
 
 class BaseConfig:
     SECRET_KEY = "ab963bce0f28acc2c3c50d84012c706469191863c901a074ec2de3b2b943"
-    WTF_CSRF_SECRET_KEY = "9a1de57fcdd1a1ece57b50f7ccb80cfb065ad12f7774191a98febc0eefc3"
-    UPLOAD_FOLDER = str(Path(basedir, "src", "files", "game_file"))
+    WTF_CSRF_SECRET_KEY = "9a1de57fcdd1a1ece57b50f7ccb80cfb065ad12f7774191a98febc0eefc3"	# flask-wtf csrf token
+    UPLOAD_FOLDER = str(Path(basedir, "src", "files", "game_file"))	# 게임 파일 업로드 폴더
 
 
 class LocalConfig(BaseConfig):
